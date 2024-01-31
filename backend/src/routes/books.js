@@ -6,7 +6,7 @@ import validateSchema from '../middlewares/validation-middleware.js';
 const router = express.Router()
 
 /* Get all books in the db */
-router.get("/", getBooks)
+router.get("/", validateSchema(bookSchema.bookList), getBooks)
 
 /* Add book */
 router.post("/", validateSchema(bookSchema.addBook), addBook)

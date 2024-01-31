@@ -2,8 +2,19 @@ import Book from "../models/Book.js"
 
 export async function getBooks(req, res) {
     try {
-        const books = await Book.find({}).sort({ _id: -1 });
-        res.status(200).json(books)
+        const totalCount = await Book.countDocuments({});
+        const books = await Book.find(
+            {},
+            null,
+            {
+                skip: req.query.offset,
+                limit: req.query.limit
+            })
+            .sort({ _id: -1 });
+        res.status(200).json({
+            results: books,
+            totalCount,
+        });
     }
     catch (err) {
         console.log(err);

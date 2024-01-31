@@ -1,6 +1,14 @@
 import Joi from 'joi';
 
 export default {
+    bookList: {
+        query: Joi
+            .object({
+                offset: Joi.number().default(0),
+                limit: Joi.number().default(10),
+            })
+            .options({ abortEarly: false }),
+    },
     addBook: {
         body: Joi
             .object({
