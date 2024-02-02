@@ -13,13 +13,11 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+import BookFormDialog from './book-form-dialog';
+import BookDeleteConfirmDialog from './book-delete-confirm-dialog';
+import BookSummary from './book-summary';
 
 export default function BookList() {
   const [books, setBooks] = React.useState([]);
@@ -27,30 +25,45 @@ export default function BookList() {
   const [page, setPage] = React.useState(1);
   const [summaryId, setSummaryId] = React.useState(null);
 
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = React.useState(false);
   const [bookToDelete, setBookToDelete] = React.useState(null);
 
   const [showBookFormDialog, setShowBookFormDialog] = React.useState(false);
-  const [bookToEdit, setBookToEdit] = React.useState({
+  const [bookFormContent, setBookFormContent] = React.useState({
+    _id: '',
     title: '',
     author: '',
     publicationYear: 2024,
     summary: '',
   });
+  const [bookFormAction, setBookFormAction] = React.useState('add');
 
-  const handleDialogClose = () => {
-    setShowDialog(false);
+  function handleDialogClose () {
+    setShowDeleteConfirmDialog(false);
     setShowBookFormDialog(false);
-  };
+  }
+
+  function handleAdd () {
+    setBookFormContent({
+      _id: '',
+      title: '',
+      author: '',
+      publicationYear: 2024,
+      summary: '',
+    });
+    setBookFormAction('add');
+    setShowBookFormDialog(true);
+  }
 
   const handleEdit = (book) => {
-    setBookToEdit(book);
+    setBookFormContent(book);
+    setBookFormAction('edit');
     setShowBookFormDialog(true);
   };
 
   const handleDelete = (book) => {
     setBookToDelete(book);
-    setShowDialog(true);
+    setShowDeleteConfirmDialog(true);
   };
 
 
@@ -68,38 +81,22 @@ export default function BookList() {
     fetchBooks((page - 1) * 10);
   };
 
-  const updateBook = (book) => {
-    axios.put(`http://localhost:5000/api/books/${book.id}`, {
-      title: book.title,
-      author: book.author,
-      publicationYear: book.publicationYear,
-      summary: book.summary,
-    })
-      .then(function (response) {
-        // handle success
-        if (response.status === 200) {
-          fetchBooks((page - 1) * 10);
-        }
-        else {
-          console.log(response);
-        }
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        handleDialogClose();
-      });
-  }
-
-  const fetchBooks = (offset) => {
+  const fetchBooks = React.useCallback((offset) => {
     axios.get(`http://localhost:5000/api/books?limit=10&offset=${offset}`)
       .then(function (response) {
         // handle success
         if (response.status === 200) {
           setBooks(response.data.results);
-          setCount(Math.ceil(response.data.totalCount / 10));
+
+          const pageCount = Math.ceil(response.data.totalCount / 10);
+          if (pageCount < page) {
+            setPage(pageCount);
+            setCount(pageCount);
+            fetchBooks((pageCount-1) * 10);
+          }
+          else {
+            setCount(pageCount);
+          }
         }
         else {
           console.log(response);
@@ -112,17 +109,27 @@ export default function BookList() {
       .finally(function () {
         // always executed
       });
-  }
+  }, [page]);
+
+  const resetBookList = React.useCallback(() => {
+    fetchBooks((page - 1) * 10);
+  }, [page, fetchBooks]);
 
   React.useEffect(() => {
-    fetchBooks(0);
+    resetBookList();
     return () => { };
-  }, [])
+  }, [resetBookList])
 
   return (
     <Container maxWidth="md">
       <Box sx={{ height: '100vh' }}>
-        <Pagination count={count} onChange={onPageChange} />
+        <Pagination count={count} page={page} onChange={onPageChange} />
+        <Chip
+          icon={<AddCircleOutlineIcon />}
+          label='Add New Book'
+          variant="outlined"
+          onClick={handleAdd}
+        />
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {books.map((book) => (<React.Fragment key={book._id}>
             <ListItem
@@ -156,126 +163,30 @@ export default function BookList() {
                 }
               />
             </ListItem>
+
             <Divider variant="inset" component="li" />
+
             <Collapse in={summaryId === book._id} >
-              <Box sx={{ width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.06)' }}>
-                <Typography variant="subtitle2" sx={{ padding: '10px 20px 10px 20px' }}>
-                  Summary
-                </Typography>
-                <Box sx={{ maxHeight: '100px', overflow: 'auto', padding: '0 20px 20px 20px' }}>
-                  <Typography variant="caption">
-                    {book.summary}
-                  </Typography>
-                </Box>
-              </Box>
+              <BookSummary summary={book.summary} />
             </Collapse>
           </ React.Fragment>))}
         </List>
       </ Box>
 
-      <Dialog
-        open={showDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Delete Book"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete {bookToDelete?.title}?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleDialogClose} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <BookDeleteConfirmDialog
+        open={showDeleteConfirmDialog}
+        bookToDelete={bookToDelete}
+        handleDialogClose={handleDialogClose}
+        resetBookList={resetBookList}
+      />
 
-      <Dialog
+      <BookFormDialog
+        action={bookFormAction}
         open={showBookFormDialog}
-        onClose={handleDialogClose}
-        PaperProps={{
-          component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            updateBook(formJson);
-          },
-        }}
-      >
-        <DialogTitle>Edit Book</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
-
-          <TextField
-            sx={{ display: 'none' }}
-            id="id"
-            name="id"
-            label="ID"
-            type="text"
-            defaultValue={bookToEdit._id}
-          />
-
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="title"
-            name="title"
-            label="Book Title"
-            type="text"
-            fullWidth
-            variant="standard"
-            defaultValue={bookToEdit.title}
-          />
-
-          <TextField
-            required
-            margin="dense"
-            id="author"
-            name="author"
-            label="Author"
-            type="text"
-            fullWidth
-            variant="standard"
-            defaultValue={bookToEdit.author}
-          />
-
-          <TextField
-            required
-            margin="dense"
-            id="publicationYear"
-            name="publicationYear"
-            label="Publication Year"
-            type="number"
-            fullWidth
-            variant="standard"
-            defaultValue={bookToEdit.publicationYear}
-          />
-
-          <TextField
-            id="summary"
-            label="Summary"
-            name="summary"
-            multiline
-            rows={4}
-            fullWidth
-            defaultValue={bookToEdit.summary}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-        </DialogActions>
-      </Dialog>
+        bookFormContent={bookFormContent}
+        handleDialogClose={handleDialogClose}
+        resetBookList={resetBookList}
+      />
     </Container>
   );
 }
