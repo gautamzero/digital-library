@@ -2,15 +2,68 @@ import Book from "../models/Book.js"
 
 export async function getBooks(req, res) {
     try {
-        const totalCount = await Book.countDocuments({});
-        const books = await Book.find(
-            {},
-            null,
-            {
-                skip: req.query.offset,
-                limit: req.query.limit
-            })
-            .sort({ _id: -1 });
+        let totalCount = 0;
+        let books = [];
+        const searchText = req.query.searchText;
+        const searchRegex = new RegExp(searchText);
+        if (searchText) {
+            totalCount = await Book.countDocuments({
+                $or: [
+                    {
+                        title: {
+                            "$regex": searchRegex
+                        },
+                    },
+                    {
+                        author: {
+                            "$regex": searchRegex
+                        },
+                    },
+                    {
+                        summary: {
+                            "$regex": searchRegex
+                        },
+                    },
+                ]
+            });
+            books = await Book.find(
+                {
+                    $or: [
+                        {
+                            title: {
+                                "$regex": searchRegex
+                            },
+                        },
+                        {
+                            author: {
+                                "$regex": searchRegex
+                            },
+                        },
+                        {
+                            summary: {
+                                "$regex": searchRegex
+                            },
+                        },
+                    ]
+                },
+                null,
+                {
+                    skip: req.query.offset,
+                    limit: req.query.limit
+                })
+                .sort({ _id: -1 });
+        } else {
+            totalCount = await Book.countDocuments({});
+            books = await Book.find(
+                {},
+                null,
+                {
+                    skip: req.query.offset,
+                    limit: req.query.limit
+                })
+                .sort({ _id: -1 });
+        }
+
         res.status(200).json({
             results: books,
             totalCount,

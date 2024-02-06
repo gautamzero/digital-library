@@ -40,7 +40,7 @@ export default function BookFormDialog(props) {
       .then(function (response) {
         // handle success
         if (response.status === 200) {
-          resetBookList();
+          resetBookList(true);
         }
         else {
           console.log(response);

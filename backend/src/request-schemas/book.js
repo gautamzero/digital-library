@@ -6,6 +6,7 @@ export default {
             .object({
                 offset: Joi.number().default(0),
                 limit: Joi.number().default(10),
+                searchText: Joi.string().trim(),
             })
             .options({ abortEarly: false }),
     },

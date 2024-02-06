@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import TextField from '@mui/material/TextField';
 
 import BookFormDialog from './book-form-dialog';
 import BookDeleteConfirmDialog from './book-delete-confirm-dialog';
@@ -24,6 +25,7 @@ export default function BookList() {
   const [count, setCount] = React.useState(1);
   const [page, setPage] = React.useState(1);
   const [summaryId, setSummaryId] = React.useState(null);
+  const [searchText, setSearchText] = React.useState('');
 
   const [showDeleteConfirmDialog, setShowDeleteConfirmDialog] = React.useState(false);
   const [bookToDelete, setBookToDelete] = React.useState(null);
@@ -38,12 +40,12 @@ export default function BookList() {
   });
   const [bookFormAction, setBookFormAction] = React.useState('add');
 
-  function handleDialogClose () {
+  function handleDialogClose() {
     setShowDeleteConfirmDialog(false);
     setShowBookFormDialog(false);
   }
 
-  function handleAdd () {
+  function handleAdd() {
     setBookFormContent({
       _id: '',
       title: '',
@@ -78,11 +80,22 @@ export default function BookList() {
 
   const onPageChange = (event, page) => {
     setPage(page);
-    fetchBooks((page - 1) * 10);
+    resetBookList();
   };
 
-  const fetchBooks = React.useCallback((offset) => {
-    axios.get(`http://localhost:5000/api/books?limit=10&offset=${offset}`)
+  function handleSearch(event) {
+    let searchText = event.target.value;
+    setSearchText(searchText);
+    setPage(1);
+    fetchBooks(0, searchText);
+  }
+
+  const fetchBooks = React.useCallback((offset, searchText = '') => {
+    let url = `http://localhost:5000/api/books?limit=10&offset=${offset}`;
+    if (searchText.length > 0) {
+      url = `${url}&searchText=${searchText}`;
+    }
+    axios.get(url)
       .then(function (response) {
         // handle success
         if (response.status === 200) {
@@ -92,7 +105,9 @@ export default function BookList() {
           if (pageCount < page) {
             setPage(pageCount);
             setCount(pageCount);
-            fetchBooks((pageCount-1) * 10);
+            if (pageCount) {
+              fetchBooks((pageCount - 1) * 10, searchText);
+            }
           }
           else {
             setCount(pageCount);
@@ -111,9 +126,15 @@ export default function BookList() {
       });
   }, [page]);
 
-  const resetBookList = React.useCallback(() => {
-    fetchBooks((page - 1) * 10);
-  }, [page, fetchBooks]);
+  const resetBookList = React.useCallback((goToFirstPage = false) => {
+    if (goToFirstPage) {
+      setPage(1);
+      fetchBooks(0, searchText);
+    }
+    else if (page) {
+      fetchBooks((page - 1) * 10, searchText);
+    }
+  }, [page, searchText, fetchBooks]);
 
   React.useEffect(() => {
     resetBookList();
@@ -123,6 +144,7 @@ export default function BookList() {
   return (
     <Container maxWidth="md">
       <Box sx={{ height: '100vh' }}>
+        <TextField fullWidth value={searchText} placeholder='Search on title, author or summary' onChange={handleSearch} id="fullWidth" />
         <Pagination count={count} page={page} onChange={onPageChange} />
         <Chip
           icon={<AddCircleOutlineIcon />}
