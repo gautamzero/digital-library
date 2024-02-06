@@ -29,10 +29,18 @@ services:
   frontend:
     build: ./frontend
     container_name: frontend_c
+    environment:
+      - WATCHPACK_POLLING=true
     ports:
       - '3000:3000'
     stdin_open: true
     tty: true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - backend
   
 volumes:
   dbdata6:
