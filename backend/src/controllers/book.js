@@ -1,4 +1,4 @@
-import bookService from "../services/book.js"
+import * as bookService from "../services/book.js"
 import { handleErrorResponse } from "../helpers/utils.js";
 
 export async function getBooks(req, res) {
@@ -51,5 +51,3 @@ export async function deleteBook(req, res) {
         handleErrorResponse(err, res);
     }
 };
-
-export default this;
