@@ -1,7 +1,7 @@
 import Book from "../models/Book.js"
 import { throwCustomError } from "../helpers/utils.js";
 
-export async function getBooks (offset = 0, limit = 10, searchText = '') {
+async function getBooks (offset = 0, limit = 10, searchText = '') {
     let totalCount = 0;
     let books = [];
     const searchRegex = new RegExp(searchText, 'i');
@@ -69,7 +69,7 @@ export async function getBooks (offset = 0, limit = 10, searchText = '') {
     };
 }
 
-export async function getBookById(id) {
+async function getBookById(id) {
     const book = await Book.findById(id);
     if (!book) {
         throwCustomError(404, 'Book not found!');
@@ -77,7 +77,7 @@ export async function getBookById(id) {
     return book;
 };
 
-export async function addBook(bookData) {
+async function addBook(bookData) {
     const newbook = new Book({
         title: bookData.title,
         author: bookData.author,
@@ -88,7 +88,7 @@ export async function addBook(bookData) {
     return book;
 };
 
-export async function updateBook(id, bookData) {
+async function updateBook(id, bookData) {
     const book = await Book.findByIdAndUpdate(id, {
         $set: bookData,
     }, {
@@ -100,6 +100,14 @@ export async function updateBook(id, bookData) {
     return book;
 }
 
-export async function deleteBook(id) {
+async function deleteBook(id) {
     return Book.findByIdAndDelete(id)
 }
+
+export default {
+    getBooks,
+    getBookById,
+    addBook,
+    updateBook,
+    deleteBook,
+};
