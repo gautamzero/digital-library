@@ -1,7 +1,7 @@
 import bookService from "../services/book.js"
 import { handleErrorResponse } from "../helpers/utils.js";
 
-export async function getBooks(req, res) {
+async function getBooks(req, res) {
     try {
         const { searchText, offset, limit } = req.query;
         const response = await bookService.getBooks(offset, limit, searchText)
@@ -13,7 +13,7 @@ export async function getBooks(req, res) {
     }
 };
 
-export async function getBookById(req, res) {
+async function getBookById(req, res) {
     try {
         const book = await bookService.getBookById(req.params.id);
         res.status(200).json(book);
@@ -23,7 +23,7 @@ export async function getBookById(req, res) {
     }
 };
 
-export async function addBook(req, res) {
+async function addBook(req, res) {
     try {
         const book = await bookService.addBook(req.body)
         res.status(200).json(book)
@@ -33,7 +33,7 @@ export async function addBook(req, res) {
     }
 };
 
-export async function updateBook(req, res) {
+async function updateBook(req, res) {
     try {
         const book = await bookService.updateBook(req.params.id, req.body);
         res.status(200).json(book);
@@ -43,7 +43,7 @@ export async function updateBook(req, res) {
     }
 };
 
-export async function deleteBook(req, res) {
+async function deleteBook(req, res) {
     try {
         await bookService.deleteBook(req.params.id)
         res.status(200).json("Book has been removed");
@@ -52,4 +52,10 @@ export async function deleteBook(req, res) {
     }
 };
 
-export default this;
+export default {
+    getBooks,
+    getBookById,
+    addBook,
+    updateBook,
+    deleteBook,
+};

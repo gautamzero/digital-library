@@ -37,8 +37,8 @@ export default {
             .object({
                 title: Joi.string(),
                 author: Joi.string(),
-                summary: Joi.string().default("lorem ipsum dolor sit"),
-                publicationYear: Joi.number().min(0).max(3000).default(2024),
+                summary: Joi.string(),
+                publicationYear: Joi.number().min(0).max(3000),
             })
             .options({ abortEarly: false }),
     },
