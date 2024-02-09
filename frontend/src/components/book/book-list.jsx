@@ -1,5 +1,4 @@
 import * as React from 'react';
-import axios from 'axios';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -19,6 +18,8 @@ import TextField from '@mui/material/TextField';
 import BookFormDialog from './book-form-dialog';
 import BookDeleteConfirmDialog from './book-delete-confirm-dialog';
 import BookSummary from './book-summary';
+
+import { fetchBooksAPI } from '../../apis/bookAPIs';
 
 export default function BookList() {
   const [books, setBooks] = React.useState([]);
@@ -91,11 +92,7 @@ export default function BookList() {
   }
 
   const fetchBooks = React.useCallback((offset, searchText = '') => {
-    let url = `http://localhost:5000/api/books?limit=10&offset=${offset}`;
-    if (searchText.length > 0) {
-      url = `${url}&searchText=${searchText}`;
-    }
-    axios.get(url)
+    fetchBooksAPI(offset, 10, searchText)
       .then(function (response) {
         // handle success
         if (response.status === 200) {

@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
+import { addBookAPI, updateBookAPI } from '../../apis/bookAPIs';
+
 export default function BookFormDialog(props) {
   const {
     action='add',
@@ -31,7 +33,7 @@ export default function BookFormDialog(props) {
   }
 
   function addBook (book) {
-    axios.post('http://localhost:5000/api/books', {
+    addBookAPI({
       title: book.title,
       author: book.author,
       publicationYear: book.publicationYear,
@@ -56,7 +58,7 @@ export default function BookFormDialog(props) {
   }
 
   function updateBook (book) {
-    axios.put(`http://localhost:5000/api/books/${book.id}`, {
+    updateBookAPI(book.id, {
       title: book.title,
       author: book.author,
       publicationYear: book.publicationYear,

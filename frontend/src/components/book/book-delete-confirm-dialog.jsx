@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { deleteBookAPI } from '../../apis/bookAPIs';
+
 export default function BookDeleteConfirmDialog(props) {
   const {
     open,
@@ -16,7 +18,7 @@ export default function BookDeleteConfirmDialog(props) {
   } = props;
 
   function deleteBook () {
-    axios.delete(`http://localhost:5000/api/books/${bookToDelete._id}`)
+    deleteBookAPI(bookToDelete._id)
       .then(function (response) {
         // handle success
         if (response.status === 200) {

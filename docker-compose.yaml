@@ -30,7 +30,9 @@ services:
     build: ./frontend
     container_name: frontend_c
     environment:
+      - PORT=3000
       - WATCHPACK_POLLING=true
+      - REACT_APP_SERVER_DOMAIN=http://localhost:5000
     ports:
       - '3000:3000'
     stdin_open: true
