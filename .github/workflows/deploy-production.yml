@@ -18,11 +18,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-      - run: cd ./backend
-      - run: npm test
+          
+      - name: Run test
+        run: cd ./backend && npm test
 
-
-      - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag gautamzero/digital-library:v1
-        run: docker push gautamzero/digital-library:v1
+        run: docker build . --file Dockerfile --tag gautamzero/digital-library:v1 && docker push gautamzero/digital-library:v1
