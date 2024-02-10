@@ -18,7 +18,7 @@ jobs:
       run: docker-compose build -f docker-compose.prod.yaml --no-cache --force-rm 
 
   test:
-  
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
