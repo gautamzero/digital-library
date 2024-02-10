@@ -61,3 +61,5 @@ This is a digital library built using React, Nodejs and MongoDB, where users can
 
 ## Demo
 * Visit the app running here: [digital-library](https://digital-library-g2rl.onrender.com/)
+
+**Note:** Since the app is running on the server with free trial, it may get idle. It may take several minutes for the app to be up and running. So, please wait couple mins after visiting the page.
