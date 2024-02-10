@@ -19,17 +19,13 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: cd to backend folder
-        run:  cd ./backend
-
       - name: Install dependencies
+        working-directory: ./backend
         run: npm i
           
       - name: Run test
+        working-directory: ./backend
         run:  npm test
-
-      - name: cd back to root
-        run:  cd ..
         
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag gautamzero/digital-library:v1
