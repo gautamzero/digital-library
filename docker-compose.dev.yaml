@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: backend_c
+    ports:
+      - '5000:5000'
+    environment:
+      - PORT=5000
+      - MONGO_URL=mongodb://mongodb:27017/digital-library
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+    networks:
+      - node-network
+
+  mongodb:
+    image: mongo:7.0.5-jammy
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - node-network
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: frontend_c
+    environment:
+      - PORT=3000
+      - WATCHPACK_POLLING=true
+      - REACT_APP_SERVER_DOMAIN=http://localhost:5000
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - backend
+  
+volumes:
+  dbdata:
+
+networks:
+  node-network:
+    driver: bridge

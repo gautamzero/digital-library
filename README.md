@@ -3,16 +3,28 @@ This is a digital library built using React, Nodejs and MongoDB, where users can
 
 ## Instructions to run the project
 ### Using Docker
+#### Development Build
 * Build and run the Docker images for backend and frontend using docker-compose.
     ```bash
-    docker-compose up
+    docker-compose -f docker-compose.dev.yaml up
     ```
+* The application will start on [http://localhost:3000](http://localhost:3000)
 
 * To bring the running container down
     ```bash
-    docker-compose down
+    docker-compose -f docker-compose.dev.yaml down
     ```
-* The application will start on [http://localhost:3000](http://localhost:3000)
+#### Production Build
+* Build and run the Docker images for backend and frontend using docker-compose.
+    ```bash
+    docker-compose -f docker-compose.prod.yaml up -d
+    ```
+* The application will start on [http://localhost:8080](http://localhost:8080)
+
+* To bring the running container down
+    ```bash
+    docker-compose -f docker-compose.prod.yaml down
+    ```
 
 ### Without Docker
 #### Running Backend

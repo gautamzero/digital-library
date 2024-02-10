@@ -2,8 +2,11 @@ version: '3'
 
 services:
   backend:
-    build: ./backend
-    container_name: backend_c
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: backend_prod_c
+    image: backend-prod-i
     ports:
       - '5000:5000'
     environment:
@@ -12,6 +15,7 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
+    restart: always
     depends_on:
       - mongodb
     networks:
@@ -27,20 +31,22 @@ services:
       - node-network
   
   frontend:
-    build: ./frontend
-    container_name: frontend_c
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: frontend_prod_c
+    image: frontend-prod-i
     environment:
       - PORT=3000
       - WATCHPACK_POLLING=true
       - REACT_APP_SERVER_DOMAIN=http://localhost:5000
     ports:
-      - '3000:3000'
+      - '8080:80'
     stdin_open: true
     tty: true
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    restart: unless-stopped
     depends_on:
       - backend
   

@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
 import winston from 'winston';
 import expressWinston from 'express-winston';
@@ -11,7 +10,6 @@ const app = express();
 
 /* Middlewares */
 app.use(express.json());
-app.use(cors());
 
 app.use(expressWinston.logger({
   transports: [
