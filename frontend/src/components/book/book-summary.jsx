@@ -12,9 +12,13 @@ export default function BookSummary(props) {
                 Summary
             </Typography>
             <Box sx={{ maxHeight: '100px', overflow: 'auto', padding: '0 20px 20px 20px' }}>
-                <Typography variant="caption">
-                    {summary}
-                </Typography>
+                {summary.split('\n').map((para) => (
+                    <Box sx={{ marginTop: '10px' }}>
+                        <Typography variant="caption">
+                            {para}
+                        </Typography>
+                    </Box>
+                ))}
             </Box>
         </Box>
     );
