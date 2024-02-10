@@ -54,5 +54,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build . -t ${{ secrets.DOCKER_USERNAME }}/{{ github.repository }}:v1
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/{{ github.repository }}:v1 .
           docker push ${{ secrets.DOCKER_USERNAME }}/{{ github.repository }}:v1
