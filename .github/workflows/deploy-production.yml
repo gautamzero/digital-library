@@ -62,4 +62,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: gautamzero/digital-library:v1
+          tags: ${{ github.repository }}:v1
