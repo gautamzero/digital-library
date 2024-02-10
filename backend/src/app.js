@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import winston from 'winston';
 import expressWinston from 'express-winston';
@@ -10,6 +11,10 @@ const app = express();
 
 /* Middlewares */
 app.use(express.json());
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors());
+}
 
 app.use(expressWinston.logger({
   transports: [
@@ -30,8 +35,8 @@ app.use(expressWinston.logger({
 /* API Routes */
 app.use("/api/books", bookRoutes);
 
-app.get("/", (req, res) => {
-  res.status(200).send("Welcome to digital library");
-});
+// app.get("/", (req, res) => {
+//   res.status(200).send("Welcome to digital library");
+// });
 
 export default app

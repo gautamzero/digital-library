@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.REACT_APP_SERVER_DOMAIN || 'http://localhost:5000';
+const BASE_URL = process.env.REACT_APP_SERVER_DOMAIN || '';
 
 export function fetchBooksAPI (offset = 0, limit = 10, searchText = '') {
     let url = `${BASE_URL}/api/books?limit=${limit}&offset=${offset}`;

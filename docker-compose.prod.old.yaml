@@ -3,8 +3,8 @@ version: '3'
 services:
   backend:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile.prod
     container_name: backend_prod_c
     image: backend-prod-i
     ports:
@@ -26,6 +26,26 @@ services:
       - dbdata:/data/db
     networks:
       - node-network
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: frontend_prod_c
+    image: frontend-prod-i
+    environment:
+      - PORT=3000
+      - WATCHPACK_POLLING=true
+      - REACT_APP_SERVER_DOMAIN=http://localhost:5000
+    ports:
+      - '8080:80'
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
   
 volumes:
   dbdata:
