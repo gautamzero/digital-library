@@ -40,3 +40,19 @@ code {
     padding-bottom: 20px;
   }
 }
+
+.text-rainbow-animation {
+  font-family:arial black;
+  font-size:10vw;
+  background-image: 
+    linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet, red); 
+  -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;  
+  animation: rainbow-animation 35s linear infinite;
+}
+
+@keyframes rainbow-animation {
+    to {
+        background-position: 4500vh;
+    }
+}
