@@ -16,7 +16,7 @@ export async function handleErrorResponse (error, res) {
     return res
       .status(status || 500)
       .send(responseData);
-  };
+  }
 
   export function throwCustomError (status, message) {
     let error = {

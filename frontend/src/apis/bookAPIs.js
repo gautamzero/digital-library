@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// eslint-disable-next-line no-undef
 const BASE_URL = process.env.REACT_APP_SERVER_DOMAIN || '';
 
 export function fetchBooksAPI (offset = 0, limit = 10, searchText = '') {

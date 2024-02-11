@@ -75,7 +75,7 @@ async function getBookById(id) {
         throwCustomError(404, 'Book not found!');
     }
     return book;
-};
+}
 
 async function addBook(bookData) {
     const newbook = new Book({
@@ -86,7 +86,7 @@ async function addBook(bookData) {
     })
     const book = await newbook.save()
     return book;
-};
+}
 
 async function updateBook(id, bookData) {
     const book = await Book.findByIdAndUpdate(id, {

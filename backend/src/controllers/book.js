@@ -11,7 +11,7 @@ async function getBooks(req, res) {
     catch (err) {
         handleErrorResponse(err, res);
     }
-};
+}
 
 async function getBookById(req, res) {
     try {
@@ -21,7 +21,7 @@ async function getBookById(req, res) {
     catch (err) {
         handleErrorResponse(err, res);
     }
-};
+}
 
 async function addBook(req, res) {
     try {
@@ -31,7 +31,7 @@ async function addBook(req, res) {
     catch (err) {
         handleErrorResponse(err, res);
     }
-};
+}
 
 async function updateBook(req, res) {
     try {
@@ -41,7 +41,7 @@ async function updateBook(req, res) {
     catch (err) {
         handleErrorResponse(err, res);
     }
-};
+}
 
 async function deleteBook(req, res) {
     try {
@@ -50,7 +50,7 @@ async function deleteBook(req, res) {
     } catch (err) {
         handleErrorResponse(err, res);
     }
-};
+}
 
 export default {
     getBooks,
