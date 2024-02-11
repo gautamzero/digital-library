@@ -135,9 +135,9 @@ export default function BookList() {
     // debounce implementation
     const timeoutId = setTimeout(() => {
       resetBookList();
-    }, 300); 
+    }, 300);
 
-    return () => clearTimeout(timeoutId); 
+    return () => clearTimeout(timeoutId);
   }, [resetBookList])
 
   return (
@@ -156,7 +156,7 @@ export default function BookList() {
             <ListItem
               alignItems="flex-start"
               secondaryAction={
-                <Box>
+                <Box class='itemaction'>
                   <Chip label={summaryId === book._id ? "Hide summary" : "See summary"} variant="outlined" size='small' onClick={() => onClickSummary(book._id)} />
                   <IconButton size="small" aria-label="edit" onClick={() => handleEdit(book)}>
                     <EditIcon />
@@ -168,6 +168,7 @@ export default function BookList() {
               }
             >
               <ListItemText
+                class='itemtext'
                 primary={book.title}
                 secondary={
                   <React.Fragment>

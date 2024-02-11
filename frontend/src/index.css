@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.itemtext {
+  margin-right: 150px;
+  max-width: fit-content; 
+  word-break: break-all;
+}
+
+@media screen and (max-width: 600px) {
+  .itemtext {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-right: 85px;
+    max-width: fit-content; 
+    word-break: break-all;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .itemaction {
+    display: grid;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
