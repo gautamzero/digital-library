@@ -87,8 +87,6 @@ export default function BookList() {
   function handleSearch(event) {
     let searchText = event.target.value;
     setSearchText(searchText);
-    setPage(1);
-    fetchBooks(0, searchText);
   }
 
   const fetchBooks = React.useCallback((offset, searchText = '') => {
@@ -99,7 +97,7 @@ export default function BookList() {
           setBooks(response.data.results);
 
           const pageCount = Math.ceil(response.data.totalCount / 10);
-          if (pageCount < page) {
+          if (pageCount && pageCount < page) {
             setPage(pageCount);
             setCount(pageCount);
             // if (pageCount) {
@@ -134,8 +132,12 @@ export default function BookList() {
   }, [page, searchText, fetchBooks]);
 
   React.useEffect(() => {
-    resetBookList();
-    return () => { };
+    // debounce implementation
+    const timeoutId = setTimeout(() => {
+      resetBookList();
+    }, 300); 
+
+    return () => clearTimeout(timeoutId); 
   }, [resetBookList])
 
   return (
