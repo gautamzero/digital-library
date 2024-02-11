@@ -81,7 +81,7 @@ export default function BookList() {
 
   const onPageChange = (event, page) => {
     setPage(page);
-    resetBookList();
+    // resetBookList();
   };
 
   function handleSearch(event) {
@@ -102,9 +102,9 @@ export default function BookList() {
           if (pageCount < page) {
             setPage(pageCount);
             setCount(pageCount);
-            if (pageCount) {
-              fetchBooks((pageCount - 1) * 10, searchText);
-            }
+            // if (pageCount) {
+            //   fetchBooks((pageCount - 1) * 10, searchText);
+            // }
           }
           else {
             setCount(pageCount);
