@@ -35,8 +35,8 @@ app.use(expressWinston.logger({
 /* API Routes */
 app.use("/api/books", bookRoutes);
 
-// app.get("/", (req, res) => {
-//   res.status(200).send("Welcome to digital library");
-// });
+app.get("/healthCheck", (req, res) => {
+  res.status(200).send("Welcome to digital library");
+});
 
 export default app
