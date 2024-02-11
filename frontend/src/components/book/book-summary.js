@@ -1,7 +1,9 @@
+import React from "react";
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export default function BookSummary(props) {
+function BookSummary(props) {
     const {
         summary,
     } = props;
@@ -12,8 +14,9 @@ export default function BookSummary(props) {
                 Summary
             </Typography>
             <Box sx={{ maxHeight: '100px', overflow: 'auto', padding: '0 20px 20px 20px' }}>
-                {summary.split('\n').map((para) => (
-                    <Box sx={{ marginTop: '10px' }}>
+                { /* eslint-disable react/prop-types */ }
+                {summary.split('\n').map((para, index) => (
+                    <Box key={index} sx={{ marginTop: '10px' }}>
                         <Typography variant="caption">
                             {para}
                         </Typography>
@@ -23,3 +26,9 @@ export default function BookSummary(props) {
         </Box>
     );
 }
+
+BookSummary.propTypes = {
+    summary: PropTypes.string,
+}
+
+export default BookSummary;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,7 +9,7 @@ import TextField from '@mui/material/TextField';
 
 import { addBookAPI, updateBookAPI } from '../../apis/bookAPIs';
 
-export default function BookFormDialog(props) {
+function BookFormDialog(props) {
   const {
     action='add',
     bookFormContent,
@@ -161,3 +162,19 @@ export default function BookFormDialog(props) {
     </Dialog>
   );
 }
+
+BookFormDialog.propTypes = {
+  action: PropTypes.string,
+  bookFormContent: PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    author: PropTypes.string,
+    publicationYear: PropTypes.number,
+    summary: PropTypes.string,
+  }),
+  open: PropTypes.bool,
+  handleDialogClose: PropTypes.function,
+  resetBookList: PropTypes.function,
+}
+
+export default BookFormDialog;

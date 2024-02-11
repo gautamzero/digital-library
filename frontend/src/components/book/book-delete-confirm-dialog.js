@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import { deleteBookAPI } from '../../apis/bookAPIs';
 
-export default function BookDeleteConfirmDialog(props) {
+function BookDeleteConfirmDialog(props) {
   const {
     open,
     bookToDelete,
@@ -60,3 +61,19 @@ export default function BookDeleteConfirmDialog(props) {
     </Dialog>
   );
 }
+
+BookDeleteConfirmDialog.propTypes = {
+  action: PropTypes.string,
+  bookToDelete: PropTypes.shape({
+    _id: PropTypes.string,
+    title: PropTypes.string,
+    author: PropTypes.string,
+    publicationYear: PropTypes.number,
+    summary: PropTypes.string,
+  }),
+  open: PropTypes.bool,
+  handleDialogClose: PropTypes.function,
+  resetBookList: PropTypes.function,
+}
+
+export default BookDeleteConfirmDialog;
