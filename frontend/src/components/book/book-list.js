@@ -143,6 +143,7 @@ export default function BookList() {
   return (
     <Container maxWidth="md">
       <Box sx={{ height: '100vh' }}>
+        <div className='text-rainbow-animation'>Digital Library</div>
         <TextField fullWidth value={searchText} placeholder='Search on title, author or summary' onChange={handleSearch} id="fullWidth" />
         <Pagination count={count} page={page} onChange={onPageChange} />
         <Chip
