@@ -58,7 +58,7 @@ code {
   -webkit-text-fill-color: transparent;
   animation: textclip 2s linear infinite;
   display: inline-block;
-  font-size: 5vw;
+  font-size: 2vw;
 }
 
 @media screen and (max-width: 600px) {
